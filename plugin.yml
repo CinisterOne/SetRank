@@ -1,0 +1,14 @@
+name: SetRank
+main: com.Baummann.SetRank.SetRank.SetRank
+version: 1.0
+author: Baummann
+
+commands:
+   rank:
+      description: Changes someone's rank
+      usage:
+           /<command> [Player] [Rank]
+   setrank:
+      description: Changes someone's rank
+      usage:
+           /<command> [Player] [Rank]
