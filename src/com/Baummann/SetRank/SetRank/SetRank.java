@@ -25,6 +25,10 @@ public class SetRank extends JavaPlugin {
 	public static boolean broadcastRankOnLogin;
 	private final spl playerListener = new spl(this);
 	
+	public double getVersion() {
+		return 1.1;
+	}
+	
     public void println(String str) {
     	System.out.println("[SetRank] " + str);
     }
@@ -58,7 +62,7 @@ public class SetRank extends JavaPlugin {
     }
     
     public boolean canUseCommand(Player player, String node) {
-    	if (SetRank.permissionHandler.has(player, node)) {
+    	if (SetRank.permissionHandler.has(player, node) || player.isOp()) {
     		return true;
     	} else {
     		return false;
@@ -106,7 +110,7 @@ public class SetRank extends JavaPlugin {
         }
     	return str;
     }
-    
+
     public void onEnable() {
     	println("Booting...");
     	setupPermissions();
@@ -126,28 +130,31 @@ public class SetRank extends JavaPlugin {
     	if (cmd.getName().equalsIgnoreCase("rank") || cmd.getName().equalsIgnoreCase("setrank")) {
     		if (sender instanceof Player) {
     			Player player = (Player) sender;
-    			if (canUseCommand(player, "setrank.rank")) {
+    			if (canUseCommand(player, "setrank.rank." + split[1]) || canUseCommand(player, "setrank.rankall")) {
     				Player t = getServer().matchPlayer(split[0]).get(0);
                     if (!canAddOrRemoveParent(t, split[1]))	{
                     	player.sendMessage(ChatColor.RED + "No such group!");
                     	return true;
                     } else if (canAddOrRemoveParent(t, split[1])) {
-                    	removeParent(t, getGroup(t));
-                    	addParent(t, split[1]);
-                    	message(player, "Changed " + t.getDisplayName() + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
-                    	String a = "";
-                    	if (split[1].startsWith("a") || split[1].startsWith("e") || split[1].startsWith("i") || split[1].startsWith("o") || split[1].startsWith("u") || split[1].startsWith("A") || split[1].startsWith("E") || split[1].startsWith("I") || split[1].startsWith("O") || split[1].startsWith("U"))
-                    		a = "an";
-                    	else
-                    		a = "a";
-                    	message(t, "You are now " + a + " " + ChatColor.YELLOW + ChatColor.YELLOW + split[1] + "!");
-                    	println(t.getName() + "'s rank has been changed to " + split[1]);
-                    	if (broadcastMessage) 
-                    		broadcast(t.getName() + " is now " + a + " " + ChatColor.YELLOW + split[1] + "!");
-                    	return true;
+                            removeParent(t, split[1]);
+                    	    addParent(t, split[1]);
+                    	    message(player, "Changed " + t.getDisplayName() + ChatColor.DARK_RED + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                    	    String a = "";
+                    	    if (split[1].startsWith("a") || split[1].startsWith("e") || split[1].startsWith("i") || split[1].startsWith("o") || split[1].startsWith("u") || split[1].startsWith("A") || split[1].startsWith("E") || split[1].startsWith("I") || split[1].startsWith("O") || split[1].startsWith("U"))
+                    		    a = "an";
+                    	    else
+                    		    a = "a";
+                    	    message(t, "You are now " + a + " " + ChatColor.YELLOW + split[1] + "!");
+                    	    println(t.getName() + "'s rank has been changed to " + split[1]);
+                    	    if (broadcastMessage) 
+                    		    broadcast(t.getName() + " is now " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                    	    return true;
                     }
-    			} else {
-    				player.sendMessage(ChatColor.RED + "You don't have access to that command!");
+    			} else if (!canUseCommand(player, "setrank.rank" + split[1])) {
+    				player.sendMessage(ChatColor.RED + "You don't have permission to rank to " + ChatColor.YELLOW + split[1] + ChatColor.RED + "!");
+    				return true;
+    			} else if (!canUseCommand(player, "setrank.rankall")) {
+    				player.sendMessage(ChatColor.RED + "You don't have permission to use this!");
     				return true;
     			}
     		} else {
@@ -156,20 +163,19 @@ public class SetRank extends JavaPlugin {
                 	sender.sendMessage(ChatColor.RED + "No such group!");
                 	return true;
                 } else if (canAddOrRemoveParent(t, split[1])) {
-                	removeParent(t, getGroup(t));
-                	addParent(t, split[1]);
-                	String s = "Changed " + t.getDisplayName() + ChatColor.DARK_RED + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!";
-                	sender.sendMessage(ChatColor.DARK_RED + s);
-                	String a = "";
-                	if (split[1].startsWith("a") || split[1].startsWith("e") || split[1].startsWith("i") || split[1].startsWith("o") || split[1].startsWith("u") || split[1].startsWith("A") || split[1].startsWith("E") || split[1].startsWith("I") || split[1].startsWith("O") || split[1].startsWith("U"))
-                		a = "an";
-                	else
-                		a = "a";
-                	message(t, "You are now " + a + " " + ChatColor.YELLOW + split[1] + "!");
-                	println(t.getName() + "'s rank has been changed to " + split[1]);
-                	if (broadcastMessage) 
-                		broadcast(t.getName() + " is now " + a + " " + ChatColor.YELLOW + split[1] + "!");
-                	return true;
+                	    removeParent(t, split[1]);
+                	    addParent(t, split[1]);
+                        sender.sendMessage(ChatColor.DARK_RED + "Changed " + t.getDisplayName() + ChatColor.DARK_RED + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                	    String a = "";
+                	    if (split[1].startsWith("a") || split[1].startsWith("e") || split[1].startsWith("i") || split[1].startsWith("o") || split[1].startsWith("u") || split[1].startsWith("A") || split[1].startsWith("E") || split[1].startsWith("I") || split[1].startsWith("O") || split[1].startsWith("U"))
+                		    a = "an";
+                	    else
+                		    a = "a";
+                	    message(t, "You are now " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                	    println(t.getName() + "'s rank has been changed to " + split[1]);
+                	    if (broadcastMessage) 
+                		    broadcast(t.getName() + " is now " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                	    return true;
                 }
     		}
     	}
