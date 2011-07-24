@@ -42,7 +42,7 @@ public class SetRank extends JavaPlugin {
     public void setupPermissions() {
     	Plugin perm = getServer().getPluginManager().getPlugin("Permissions");
     	
-    	if (SetRank.permissionHandler == null) {
+    	if (permissionHandler == null) {
     		if (perm != null) {
     			println("Permissions system detected!");
     			SetRank.permissionHandler = ((Permissions) perm).getHandler();
