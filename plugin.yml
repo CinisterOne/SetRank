@@ -1,6 +1,6 @@
 name: SetRank
 main: com.Baummann.SetRank.SetRank.SetRank
-version: 1.1_1
+version: 1.1_2
 author: Baummann
 
 commands:
