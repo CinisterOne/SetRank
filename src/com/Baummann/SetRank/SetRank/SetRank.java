@@ -24,10 +24,7 @@ public class SetRank extends JavaPlugin {
 	public static boolean broadcastMessage;
 	public static boolean broadcastRankOnLogin;
 	private final spl playerListener = new spl(this);
-	
-	public double getVersion() {
-		return 1.1;
-	}
+	public static String ownerName;
 	
     public void println(String str) {
     	System.out.println("[SetRank] " + str);
@@ -51,8 +48,6 @@ public class SetRank extends JavaPlugin {
     		} else {
     			println("Permissions system not detected!");
     			println("The plugin will be deleted as soon as the server goes offline!");
-    			println("It will be disabled for now!");
-    			getServer().getPluginManager().disablePlugin(this);
     			new File("plugins/SetRank.jar").deleteOnExit();
     			new File("plugins/SetRank").deleteOnExit();
     		}
@@ -96,6 +91,7 @@ public class SetRank extends JavaPlugin {
     	config.load();
     	SetRank.broadcastMessage = config.getBoolean("broadcast-message-on-rank-change", true);
     	SetRank.broadcastRankOnLogin = config.getBoolean("broadcast-rank-on-login", true);
+    	SetRank.ownerName = config.getString("owner-name", "");
     	config.setProperty("broadcast-message-on-rank-change", Boolean.valueOf(SetRank.broadcastMessage));
     	config.setProperty("broadcast-rank-on-login", Boolean.valueOf(SetRank.broadcastRankOnLogin));
     	config.save();
@@ -136,7 +132,7 @@ public class SetRank extends JavaPlugin {
                     	player.sendMessage(ChatColor.RED + "No such group!");
                     	return true;
                     } else if (canAddOrRemoveParent(t, split[1])) {
-                            removeParent(t, split[1]);
+                            removeParent(t, getGroup(t));
                     	    addParent(t, split[1]);
                     	    message(player, "Changed " + t.getDisplayName() + ChatColor.DARK_RED + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
                     	    String a = "";
@@ -163,7 +159,7 @@ public class SetRank extends JavaPlugin {
                 	sender.sendMessage(ChatColor.RED + "No such group!");
                 	return true;
                 } else if (canAddOrRemoveParent(t, split[1])) {
-                	    removeParent(t, split[1]);
+                	    removeParent(t, getGroup(t));
                 	    addParent(t, split[1]);
                         sender.sendMessage(ChatColor.DARK_RED + "Changed " + t.getDisplayName() + ChatColor.DARK_RED + "'s rank to " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
                 	    String a = "";

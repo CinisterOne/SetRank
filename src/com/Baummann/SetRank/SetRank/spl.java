@@ -16,11 +16,16 @@ public class spl extends PlayerListener {
     	Player player = event.getPlayer();
     	String a = "";
     	String g = plugin.getGroup(player);
-    	if (g.startsWith("a") || g.startsWith("e") || g.startsWith("i") || g.startsWith("o") || g.startsWith("u") || g.startsWith("A") || g.startsWith("E") || g.startsWith("I") || g.startsWith("O") || g.startsWith("U"))
-    		a = "an";
-    	else
-    		a = "a";
-    	if (SetRank.broadcastRankOnLogin)
-    	    event.setJoinMessage(ChatColor.DARK_RED + player.getName() + " " + ChatColor.DARK_RED + a + " " + ChatColor.YELLOW + g + ChatColor.DARK_RED + " joined the game!");
+    	if (player.getName().equals(SetRank.ownerName)) {
+    		if (SetRank.broadcastRankOnLogin)
+    			event.setJoinMessage(ChatColor.DARK_RED + player.getName() + " " + ChatColor.DARK_RED + "the " + ChatColor.YELLOW + "Owner " + ChatColor.DARK_RED + "joined the game");
+    	} else {
+    	    if (g.startsWith("a") || g.startsWith("e") || g.startsWith("i") || g.startsWith("o") || g.startsWith("u") || g.startsWith("A") || g.startsWith("E") || g.startsWith("I") || g.startsWith("O") || g.startsWith("U"))
+    		    a = "an";
+    	    else
+    		    a = "a";
+    	    if (SetRank.broadcastRankOnLogin)
+    	        event.setJoinMessage(ChatColor.DARK_RED + player.getName() + " " + ChatColor.DARK_RED + a + " " + ChatColor.YELLOW + g + ChatColor.DARK_RED + " joined the game!");
+    	}
     }
 }
