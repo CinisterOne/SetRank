@@ -65,6 +65,14 @@ public class SetRank extends JavaPlugin {
     	}
     }
     
+    public boolean canUseOnPlayer(Player player, Player target, String node) {
+    	if ((canUseCommand(player, node) && canUseCommand(player, "setrank.rank." + getGroup(target))) || player.isOp()) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
     public boolean canAddOrRemoveParent(Player player, String g) {
     	User user = SetRank.permissionHandler.getUserObject(player.getWorld().getName(), player.getName());
     	if (user == null)
@@ -127,8 +135,8 @@ public class SetRank extends JavaPlugin {
     	if (cmd.getName().equalsIgnoreCase("rank") || cmd.getName().equalsIgnoreCase("setrank")) {
     		if (sender instanceof Player) {
     			Player player = (Player) sender;
-    			if (canUseCommand(player, "setrank.rank." + split[1]) || canUseCommand(player, "setrank.rankall")) {
-    				Player t = getServer().matchPlayer(split[0]).get(0);
+				Player t = getServer().matchPlayer(split[0]).get(0);
+    			if (canUseOnPlayer(player, t, "setrank.rank." + split[1]) || canUseCommand(player, "setrank.rankall")) {
                     if (!canAddOrRemoveParent(t, split[1]))	{
                     	player.sendMessage(ChatColor.RED + "No such group!");
                     	return true;
@@ -144,10 +152,10 @@ public class SetRank extends JavaPlugin {
                     	    message(t, "You are now " + a + " " + ChatColor.YELLOW + split[1] + "!");
                     	    println(t.getName() + "'s rank has been changed to " + split[1]);
                     	    if (broadcastMessage) 
-                    		    broadcast(t.getName() + " is now " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                    		    broadcast(player.getName() + " changed  " + t.getName() + " to " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
                     	    return true;
                     }
-    			} else if (!canUseCommand(player, "setrank.rank" + split[1])) {
+    			} else if (canUseOnPlayer(player, t, "setrank.rank" + split[1])) {
     				player.sendMessage(ChatColor.RED + "You don't have permission to rank to " + ChatColor.YELLOW + split[1] + ChatColor.RED + "!");
     				return true;
     			} else if (!canUseCommand(player, "setrank.rankall")) {
