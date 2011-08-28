@@ -150,9 +150,9 @@ public class SetRank extends JavaPlugin {
                     	    else
                     		    a = "a";
                     	    message(t, "You are now " + a + " " + ChatColor.YELLOW + split[1] + "!");
-                    	    println(t.getName() + "'s rank has been changed to " + split[1]);
+                    	    println(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_RED + " changed " + ChatColor.DARK_AQUA + t.getName() + ChatColor.DARK_RED + " to " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
                     	    if (broadcastMessage) 
-                    		    broadcast(player.getName() + " changed  " + t.getName() + " to " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
+                    		    broadcast(ChatColor.DARK_AQUA + player.getName() + ChatColor.DARK_RED + " changed " + ChatColor.DARK_AQUA + t.getName() + ChatColor.DARK_RED + " to " + a + " " + ChatColor.YELLOW + split[1] + ChatColor.DARK_RED + "!");
                     	    return true;
                     }
     			} else if (canUseOnPlayer(player, t, "setrank.rank" + split[1])) {
